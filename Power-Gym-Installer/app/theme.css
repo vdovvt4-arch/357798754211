@@ -1,0 +1,239 @@
+/* =========================================================
+   theme.css - طبقة الجمال لـ Power Gym
+   تتحمّل فوق style.css و تعديلات index.html
+   ========================================================= */
+
+:root {
+  --pg-accent: #38bdf8;
+  --pg-blue: #2563eb;
+  --pg-glow: rgba(37, 99, 235, 0.35);
+}
+
+/* إضاءة خلفية ناعمة بدل الخلفية المسطحة */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(37, 99, 235, 0.28), transparent 42%),
+    radial-gradient(circle at 88% 85%, rgba(56, 189, 248, 0.18), transparent 46%);
+}
+
+/* ---------- الغلاف الرئيسي (Hero) ---------- */
+.pg-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 25px 60px rgba(2, 8, 23, 0.55);
+  margin-bottom: 1.5rem;
+  min-height: 210px;
+}
+.pg-hero__img {
+  position: absolute;
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80") center / cover no-repeat;
+  transform: scale(1.04);
+  animation: pgSlowZoom 22s ease-in-out infinite alternate;
+}
+@keyframes pgSlowZoom {
+  to { transform: scale(1.14); }
+}
+.pg-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(7, 17, 31, 0.96) 0%, rgba(7, 17, 31, 0.7) 55%, rgba(37, 99, 235, 0.35) 100%);
+}
+.pg-hero__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.pg-hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 800;
+}
+.pg-hero__title {
+  font-size: clamp(22px, 3.2vw, 34px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.25;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+.pg-hero__sub {
+  font-size: 13px;
+  color: #cbd5e1;
+  max-width: 560px;
+}
+.pg-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.pg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+}
+.pg-btn--ghost {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: none;
+  color: #e2e8f0;
+}
+.pg-btn:hover { filter: brightness(1.1); }
+
+/* ---------- بطاقات الإحصائيات ---------- */
+#playersDirectory > .grid > .card-bg {
+  background: linear-gradient(145deg, rgba(15, 30, 55, 0.95), rgba(7, 17, 31, 0.92));
+  position: relative;
+  overflow: hidden;
+}
+#playersDirectory > .grid > .card-bg::after {
+  content: '';
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  left: -30px;
+  bottom: -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+  pointer-events: none;
+}
+#playersDirectory > .grid > .card-bg:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(37, 99, 235, 0.22);
+}
+#playersDirectory > .grid > .card-bg p.text-2xl,
+#playersDirectory > .grid > .card-bg p.text-lg {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- بطاقات اللاعبين ---------- */
+#playersGrid > div {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(15, 30, 55, 0.92), rgba(7, 17, 31, 0.94));
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+#playersGrid > div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #38bdf8, #2563eb);
+}
+#playersGrid > div.border-red-500\/50::before {
+  background: linear-gradient(90deg, #f87171, #dc2626);
+}
+#playersGrid > div.border-amber-500\/50::before {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+#playersGrid > div:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35), 0 22px 50px rgba(37, 99, 235, 0.22);
+}
+
+/* صورة بديلة بالحروف الأولى */
+.pg-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, hsl(var(--hue, 210) 85% 60%), hsl(calc(var(--hue, 210) + 40) 80% 45%));
+  box-shadow: 0 0 0 2px rgba(7, 17, 31, 0.9), 0 0 0 4px hsl(var(--hue, 210) 85% 60% / 0.55);
+  letter-spacing: 0.5px;
+}
+.pg-avatar--card { width: 64px; height: 64px; font-size: 20px; }
+.pg-avatar--lg { width: 96px; height: 96px; font-size: 30px; }
+
+/* شريط تقدّم الاشتراك */
+.pg-progress {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(51, 65, 85, 0.55);
+  overflow: hidden;
+}
+.pg-progress > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--p, 0%);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #2563eb);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+  transition: width 600ms ease;
+}
+.pg-progress--soon > span { background: linear-gradient(90deg, #fde68a, #f59e0b); box-shadow: 0 0 12px rgba(251, 191, 36, 0.6); }
+.pg-progress--expired > span { background: linear-gradient(90deg, #fca5a5, #dc2626); box-shadow: 0 0 12px rgba(248, 113, 113, 0.6); }
+
+/* الجدول */
+#playersTableContainer { background: linear-gradient(160deg, rgba(15, 30, 55, 0.92), rgba(7, 17, 31, 0.94)); }
+#playersTableContainer tbody tr { transition: background-color 150ms ease; }
+#playersTableContainer tbody tr:hover { background: rgba(37, 99, 235, 0.1); }
+
+/* ---------- الشريط الجانبي ---------- */
+#desktopSidebar {
+  background: linear-gradient(180deg, rgba(7, 17, 31, 0.98), rgba(4, 12, 24, 0.98));
+}
+#desktopSidebar .sidebar-link {
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+#desktopSidebar .sidebar-link:hover {
+  transform: translateX(-3px);
+}
+
+/* ---------- شريط البحث والفلترة ---------- */
+#playersDirectory > .card-bg {
+  background: rgba(7, 17, 31, 0.8);
+}
+
+/* ---------- النوافذ ---------- */
+.modal-backdrop {
+  background: rgba(3, 8, 18, 0.78);
+}
+#monthlyReportModal .card-bg,
+#playerModal .card-bg {
+  background: linear-gradient(160deg, rgba(15, 30, 55, 0.98), rgba(7, 17, 31, 0.98));
+}
+
+/* ---------- جوال ---------- */
+@media (max-width: 640px) {
+  .pg-hero { border-radius: 22px; min-height: 180px; }
+  .pg-hero__content { padding: 20px; }
+  .pg-hero__sub { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-hero__img { animation: none; }
+  #playersGrid > div, #playersDirectory > .grid > .card-bg { transition: none; }
+}

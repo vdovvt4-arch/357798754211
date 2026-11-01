@@ -1,0 +1,26 @@
+{
+  "name": "Power Gym - بور جم | منظومة إدارة الاشتراكات",
+  "short_name": "Power Gym",
+  "description": "المنظومة المتكاملة لإدارة اشتراكات قاعة بور جم - كربلاء الحر قرب فلكة الثورة",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#2563eb",
+  "orientation": "any",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "build/icon.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+/* تحسينات الهاتف والشاشات الصغيرة - Power Gym */
+html { -webkit-text-size-adjust: 100%; }
+body { padding-bottom: max(4rem, env(safe-area-inset-bottom)); overflow-x: hidden; }
+button, a, select, label { touch-action: manipulation; }
+
+@media (max-width: 640px) {
+  /* منع تكبير iOS التلقائي عند الكتابة */
+  input, select, textarea { font-size: 16px !important; }
+
+  /* النوافذ بحجم الشاشة كاملة على الهاتف */
+  .modal-backdrop { padding: 0 !important; align-items: stretch !important; }
+  .modal-backdrop > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: 100dvh !important;
+    min-height: 100dvh;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    overflow-y: auto;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+
+  /* أهداف لمس مريحة */
+  button { min-height: 40px; }
+
+  /* معاينة الوصل والتقارير تُمرَّر أفقياً */
+  .rcpt { max-width: none; }
+}
+
+/* زر تثبيت التطبيق */
+#pwaInstallBtn {
+  position: fixed; left: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 45;
+  background: #2563eb; color: #fff; font-weight: 800; font-size: 13px;
+  padding: 10px 14px; border-radius: 14px; border: 0; box-shadow: 0 6px 20px rgba(0,0,0,.4);
+}

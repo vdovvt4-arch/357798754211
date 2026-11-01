@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-labelledby="title">
+  <title id="title">Power Gym</title>
+  <defs>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff3947"/>
+      <stop offset="1" stop-color="#bd1025"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cbd5e1"/>
+      <stop offset="1" stop-color="#64748b"/>
+    </linearGradient>
+  </defs>
+  <circle cx="180" cy="158" r="118" fill="#07111f" stroke="#1e40af" stroke-width="8"/>
+  <path d="M142 77v-14c0-22 17-39 38-39s38 17 38 39v14h-17V63c0-12-9-21-21-21s-21 9-21 21v14z" fill="url(#red)"/>
+  <path d="M30 147h300v18H30z" fill="url(#steel)"/>
+  <path d="M46 118h21v76H46zM73 101h27v110H73zM266 101h27v110h-27zM293 118h21v76h-21z" fill="#111827" stroke="#2563eb" stroke-width="4"/>
+  <path d="M119 126c0-22 27-40 61-40s61 18 61 40v57c0 34-27 61-61 61s-61-27-61-61z" fill="url(#red)"/>
+  <path d="M153 171c-12-8-23-8-30-3l-14 15 9 10 18-11 13 9-5 25 14 17 11-27-3-22zM207 171c12-8 23-8 30-3l14 15-9 10-18-11-13 9 5 25-14 17-11-27 3-22z" fill="#f8fafc"/>
+  <circle cx="180" cy="143" r="17" fill="#f8fafc"/>
+  <path d="M160 163c5-8 12-12 20-12s15 4 20 12l8 24-11 16-4 32h-26l-4-32-11-16z" fill="#f8fafc"/>
+  <text x="180" y="318" text-anchor="middle" fill="#f8fafc" stroke="#0f172a" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="35" font-weight="700" letter-spacing="5">POWER GYM</text>
+</svg>

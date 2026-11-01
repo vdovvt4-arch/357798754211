@@ -1,0 +1,63 @@
+{
+  "gymName": "Power Gym - بور جم (كربلاء - الحر - قرب فلكة الثورة)",
+  "exportedAt": "2026-10-31T02:30:00.000Z",
+  "players": [
+    {
+      "id": "plr_sample_1",
+      "code": "PG-1001",
+      "name": "حسين علي الكربلائي",
+      "age": 24,
+      "phone": "07801234567",
+      "planType": "شامل VIP (حديد + كارديو)",
+      "startDate": "2026-10-15",
+      "durationMonths": 1,
+      "endDate": "2026-11-15",
+      "paidAmount": 35000,
+      "debtAmount": 0,
+      "notes": "كورس ضخامة عضلية",
+      "attendanceCount": 12,
+      "lastCheckIn": "2026-10-31",
+      "photo": "",
+      "telegramFileId": "",
+      "createdAt": "2026-10-15T10:00:00.000Z"
+    },
+    {
+      "id": "plr_sample_2",
+      "code": "PG-1002",
+      "name": "عباس فاضل الشمري",
+      "age": 21,
+      "phone": "07719876543",
+      "planType": "حديد عام (كمال أجسام)",
+      "startDate": "2026-10-02",
+      "durationMonths": 1,
+      "endDate": "2026-11-02",
+      "paidAmount": 20000,
+      "debtAmount": 5000,
+      "notes": "متبقي 5000 د.ع",
+      "attendanceCount": 18,
+      "lastCheckIn": "2026-10-30",
+      "photo": "",
+      "telegramFileId": "",
+      "createdAt": "2026-10-02T14:00:00.000Z"
+    },
+    {
+      "id": "plr_sample_3",
+      "code": "PG-1003",
+      "name": "مقتدى محمد الحر",
+      "age": 27,
+      "phone": "07811122334",
+      "planType": "حديد عام (كمال أجسام)",
+      "startDate": "2026-09-25",
+      "durationMonths": 1,
+      "endDate": "2026-10-25",
+      "paidAmount": 25000,
+      "debtAmount": 0,
+      "notes": "اشتراك منتهي يحتاج تذكير",
+      "attendanceCount": 22,
+      "lastCheckIn": "2026-10-24",
+      "photo": "",
+      "telegramFileId": "",
+      "createdAt": "2026-09-25T16:00:00.000Z"
+    }
+  ]
+}

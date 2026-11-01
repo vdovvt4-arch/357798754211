@@ -1,0 +1,149 @@
+body {
+  font-family: 'Cairo', sans-serif;
+  background-color: #07111f;
+  background-image:
+    linear-gradient(115deg, rgba(3, 8, 18, 0.92), rgba(4, 18, 38, 0.76)),
+    url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=85");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #f8fafc;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.card-bg {
+  background: rgba(7, 17, 31, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  box-shadow: 0 18px 50px rgba(2, 8, 23, 0.24);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #38bdf8 0%, #2563eb 55%, #1d4ed8 100%);
+}
+
+.modal-backdrop {
+  background: rgba(3, 8, 18, 0.84);
+  backdrop-filter: blur(7px);
+}
+
+.sidebar-link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.85rem;
+  padding: 0.72rem 0.8rem;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.sidebar-link i {
+  width: 1.15rem;
+  color: #60a5fa;
+  text-align: center;
+}
+
+.sidebar-link:hover {
+  border-color: rgba(59, 130, 246, 0.22);
+  background: rgba(37, 99, 235, 0.12);
+  color: #fff;
+}
+
+.sidebar-link:hover i {
+  color: #7dd3fc;
+}
+
+#desktopSidebar nav section + section {
+  border-top: 1px solid rgba(51, 65, 85, 0.45);
+  padding-top: 1rem;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07111f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e40af;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
+button:not(:disabled), a, input, select, textarea {
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  body:not([data-print-mode="course"]):not([data-print-mode="receipt"]):not([data-print-mode="report"]) #printableCardArea,
+  body:not([data-print-mode="course"]):not([data-print-mode="receipt"]):not([data-print-mode="report"]) #printableCardArea *,
+  body[data-print-mode="course"] #courseRecordPrintArea,
+  body[data-print-mode="course"] #courseRecordPrintArea * {
+    visibility: visible;
+  }
+
+  body:not([data-print-mode="course"]):not([data-print-mode="receipt"]):not([data-print-mode="report"]) #printableCardArea {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 360px;
+    background: #07111f !important;
+    color: #fff !important;
+    border: 2px solid #2563eb !important;
+    border-radius: 20px;
+    padding: 20px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body[data-print-mode="course"] #courseRecordPrintArea {
+    position: fixed;
+    inset: 0;
+    overflow: visible;
+    width: 100%;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body[data-print-mode="course"] #courseRecordPrintArea * {
+    color: #111827 !important;
+  }
+
+  body[data-print-mode="course"] #courseRecordImages img {
+    max-height: 95mm;
+    object-fit: contain;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}

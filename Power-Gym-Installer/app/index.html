@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Power Gym">
+  <link rel="apple-touch-icon" href="build/icon.png">
+  <!-- سياسة أمان المحتوى (CSP) للحماية من حقن السكربتات الخارجية -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://cdn-icons-png.flaticon.com https://api.qrserver.com https://images.unsplash.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' https://api.telegram.org;">
+  <title>Power Gym - بور جم | المنظومة الذكية المتكاملة لإدارة القاعة</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#07111f">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="mobile.css">
+  <!-- تخزين البيانات على حاسبة الكابتن (يشتغل فقط داخل تطبيق سطح المكتب) -->
+  <script src="storage-shim.js"></script>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts (Cairo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+          },
+          colors: {
+            gymDark: '#0f172a',
+            gymBlack: '#07111f',
+            gymGold: '#2563eb',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #07111f;
+      background-image:
+        linear-gradient(115deg, rgba(3, 8, 18, 0.92), rgba(4, 18, 38, 0.76)),
+        url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=85");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #f8fafc;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .card-bg {
+      background: rgba(7, 17, 31, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      box-shadow: 0 18px 50px rgba(2, 8, 23, 0.24);
+    }
+
+    .gold-gradient {
+      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 55%, #1d4ed8 100%);
+    }
+
+    .modal-backdrop {
+      background: rgba(5, 8, 15, 0.82);
+      backdrop-filter: blur(6px);
+    }
+
+    .sidebar-link {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      gap: 0.75rem;
+      border: 1px solid transparent;
+      border-radius: 0.85rem;
+      padding: 0.72rem 0.8rem;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .sidebar-link i {
+      width: 1.15rem;
+      color: #60a5fa;
+      text-align: center;
+    }
+
+    .sidebar-link:hover {
+      border-color: rgba(59, 130, 246, 0.22);
+      background: rgba(37, 99, 235, 0.12);
+      color: #fff;
+    }
+
+    .sidebar-link:hover i {
+      color: #7dd3fc;
+    }
+
+    #desktopSidebar nav section + section {
+      border-top: 1px solid rgba(51, 65, 85, 0.45);
+      padding-top: 1rem;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    button:not(:disabled), a, input, select, textarea {
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    button:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 2px;
+    }
+
+    [class~="text-amber-300"], [class~="text-amber-400"], [class~="text-amber-500"], [class~="text-amber-600"] {
+      color: #38bdf8 !important;
+    }
+    [class~="bg-amber-500"], [class~="bg-amber-400"] {
+      background-color: #2563eb !important;
+    }
+    [class~="bg-amber-500"][class~="text-black"], [class~="bg-amber-400"][class~="text-black"] {
+      color: #fff !important;
+    }
+    [class~="bg-amber-500/10"] { background-color: rgba(37, 99, 235, 0.1) !important; }
+    [class~="bg-amber-500/15"] { background-color: rgba(37, 99, 235, 0.15) !important; }
+    [class~="bg-amber-500/20"] { background-color: rgba(37, 99, 235, 0.2) !important; }
+    [class~="bg-amber-500/25"] { background-color: rgba(37, 99, 235, 0.25) !important; }
+    [class~="bg-amber-500/30"] { background-color: rgba(37, 99, 235, 0.3) !important; }
+    [class~="border-amber-500"], [class~="border-amber-500/30"], [class~="border-amber-500/40"] {
+      border-color: rgba(56, 189, 248, 0.55) !important;
+    }
+    [class~="shadow-amber-500/20"], [class~="shadow-amber-500/25"], [class~="shadow-amber-500/30"] {
+      --tw-shadow-color: rgba(37, 99, 235, 0.28) !important;
+    }
+    [class~="hover:bg-amber-500"]:hover { background-color: #1d4ed8 !important; }
+    [class~="hover:bg-amber-500/25"]:hover { background-color: rgba(37, 99, 235, 0.25) !important; }
+    [class~="hover:bg-amber-500/30"]:hover { background-color: rgba(37, 99, 235, 0.3) !important; }
+    [class~="focus:border-amber-500"]:focus { border-color: #38bdf8 !important; }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      body:not([data-print-mode="course"]):not([data-print-mode="receipt"]):not([data-print-mode="report"]) #printableCardArea,
+      body:not([data-print-mode="course"]):not([data-print-mode="receipt"]):not([data-print-mode="report"]) #printableCardArea *,
+      body[data-print-mode="course"] #courseRecordPrintArea,
+      body[data-print-mode="course"] #courseRecordPrintArea * {
+        visibility: visible;
+      }
+      body:not([data-print-mode="course"]):not([data-print-mode="receipt"]):not([data-print-mode="report"]) #printableCardArea {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 360px;
+        background: #07111f !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 2px solid #2563eb !important;
+        border-radius: 20px;
+        padding: 20px;
+      }
+      body[data-print-mode="course"] #courseRecordPrintArea {
+        position: fixed;
+        inset: 0;
+        overflow: visible;
+        width: 100%;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        color: #111827 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      body[data-print-mode="course"] #courseRecordPrintArea * {
+        color: #111827 !important;
+      }
+      body[data-print-mode="course"] #courseRecordImages img {
+        max-height: 95mm;
+        object-fit: contain;
+      }
+      @page { margin: 12mm; }
+    }
+
+    /* أنيميشن شاشة التحميل الذكية */
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(37, 99, 235, 0.45); }
+      50% { transform: scale(1.07); box-shadow: 0 0 55px rgba(56, 189, 248, 0.65); }
+    }
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .splash-logo-anim {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+    .splash-text-anim {
+      animation: floatUp 0.6s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="pb-16 select-none md:select-auto">
+
+  <!-- ========================================== -->
+  <!-- شاشة التحميل الذكية والاحترافية (Smart Splash Screen) -->
+  <!-- ========================================== -->
+  <div id="smartSplashScreen" class="fixed inset-0 bg-slate-950 z-[60] flex flex-col items-center justify-center p-6 transition-opacity duration-500">
+    <div class="relative flex flex-col items-center max-w-md w-full text-center">
+      <!-- لوكو علامة حديد مخصص (Custom Iron Barbell Emblem) -->
+      <div class="w-36 h-36 rounded-3xl bg-slate-900/90 border-2 border-blue-500/60 flex items-center justify-center mb-6 splash-logo-anim relative shadow-2xl p-2">
+        <img src="logo.svg" alt="شعار Power Gym" class="w-full h-full object-contain">
+        <span class="absolute -bottom-2.5 -right-2 bg-amber-500 text-black text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-lg">
+          POWER GYM
+        </span>
+      </div>
+
+      <h1 id="splashGymTitle" class="text-3xl md:text-4xl font-black text-white tracking-wide splash-text-anim">
+        POWER GYM <span class="text-amber-500">| بور جم</span>
+      </h1>
+      <p id="splashGymSubtitle" class="text-xs md:text-sm text-slate-300 font-bold mt-2 flex items-center justify-center gap-1.5 splash-text-anim">
+        <i class="fa-solid fa-location-dot text-amber-500"></i>
+        <span>كربلاء المقدسة - الحر - قرب فلكة الثورة</span>
+      </p>
+      <p class="text-[11px] text-amber-400/90 font-bold mt-1.5">المنظومة الذكية المهيكلة لإدارة اللاعبين والتقويم والأرباح وبوت التليكرام</p>
+
+      <div class="w-full bg-slate-900 border border-slate-800 h-3 rounded-full mt-7 overflow-hidden p-0.5">
+        <div id="splashProgressBar" class="h-full gold-gradient rounded-full transition-all duration-300" style="width: 15%"></div>
+      </div>
+
+      <div class="flex items-center justify-between w-full mt-2.5 text-xs font-bold">
+        <span id="splashStatusText" class="text-slate-300 flex items-center gap-1.5">
+          <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i>
+          <span>جاري تهيئة هيكلة البيانات والتقويم الذكي...</span>
+        </span>
+        <span id="splashPercentText" class="text-amber-400 font-black" dir="ltr">15%</span>
+      </div>
+
+      <button onclick="dismissSplashScreenNow()" class="mt-6 text-[11px] text-slate-400 hover:text-amber-400 font-bold transition bg-slate-900/80 border border-slate-800 px-4 py-1.5 rounded-full">
+        دخول فوري للنظام <i class="fa-solid fa-arrow-left mr-1"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- شاشة القفل الأمني (PIN Security Lock Screen) -->
+  <!-- ========================================== -->
+  <div id="lockScreenModal" class="fixed inset-0 bg-slate-950 z-50 hidden flex flex-col items-center justify-center p-4">
+    <div class="card-bg w-full max-w-sm rounded-3xl p-7 border border-amber-500/40 shadow-2xl text-center">
+      <div class="w-16 h-16 rounded-2xl gold-gradient flex items-center justify-center text-black text-3xl mx-auto mb-4 shadow-lg shadow-amber-500/30">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h2 class="text-xl font-black text-white">النظام محمي برمز سري</h2>
+      <p class="text-xs text-slate-400 mt-1 mb-5">Power Gym - بور جم (كربلاء - الحر - قرب فلكة الثورة)</p>
+
+      <form onsubmit="unlockSystem(event)" class="space-y-4">
+        <input type="password" id="unlockPinInput" placeholder="أدخل رمز الحماية (PIN)" required autocomplete="off" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg tracking-widest font-black text-amber-400 focus:border-amber-500 focus:outline-none" dir="ltr">
+        <p id="lockErrorMsg" class="text-xs text-red-400 font-bold hidden"></p>
+        <button type="submit" class="w-full gold-gradient text-black font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition">
+          <i class="fa-solid fa-unlock-keyhole ml-1"></i> فتح القفل والدخول
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- إشعارات علوية (Toast Container) -->
+  <div id="toastContainer" class="fixed top-4 left-4 right-4 md:left-auto md:right-6 md:w-96 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div id="mobileMenuBackdrop" class="fixed inset-0 z-40 hidden bg-slate-950/75 backdrop-blur-sm lg:hidden" onclick="closeMobileMenu()"></div>
+  <aside id="desktopSidebar" class="fixed right-0 top-0 bottom-0 z-50 hidden w-72 flex-col border-l border-blue-500/20 bg-slate-950/95 shadow-2xl backdrop-blur-xl lg:z-30 lg:flex">
+    <div class="border-b border-slate-800 p-5">
+      <div class="flex items-center gap-3">
+        <div class="h-14 w-14 rounded-2xl border border-blue-500/40 bg-slate-900 p-1.5">
+          <img src="logo.svg" alt="شعار Power Gym" class="h-full w-full object-contain">
+        </div>
+        <div class="min-w-0">
+          <p class="truncate text-lg font-black text-white">Power Gym</p>
+          <p class="text-[11px] font-bold text-blue-300">لوحة إدارة القاعة</p>
+        </div>
+      </div>
+      <button onclick="openAddModal(); closeMobileMenu();" class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-blue-600 to-sky-500 px-4 py-3 text-sm font-black text-white shadow-lg shadow-blue-950/50">
+        <i class="fa-solid fa-user-plus"></i><span>تسجيل لاعب جديد</span>
+      </button>
+    </div>
+
+    <nav aria-label="القائمة الرئيسية" class="flex-1 space-y-5 overflow-y-auto p-4">
+      <section>
+        <h2 class="mb-2 px-3 text-[10px] font-black uppercase tracking-widest text-slate-500">الرئيسية</h2>
+        <button onclick="scrollToPlayersDirectory(); closeMobileMenu();" class="sidebar-link">
+          <i class="fa-solid fa-users"></i><span>إدارة اللاعبين</span><span id="sidebarPlayerCount" class="mr-auto rounded-full bg-blue-500/15 px-2 py-0.5 text-[10px] text-blue-300">0</span>
+        </button>
+        <button onclick="openSmartCalendarModal(); closeMobileMenu();" class="sidebar-link">
+          <i class="fa-solid fa-calendar-days"></i><span>التقويم الذكي</span>
+        </button>
+      </section>
+
+      <section>
+        <h2 class="mb-2 px-3 text-[10px] font-black uppercase tracking-widest text-slate-500">المالية والتخصيص</h2>
+        <button onclick="openFinanceModal('profits'); closeMobileMenu();" class="sidebar-link">
+          <i class="fa-solid fa-chart-line"></i><span>الأرباح والمصاريف</span>
+        </button>
+        <button onclick="openFinanceModal('debts'); closeMobileMenu();" class="sidebar-link">
+          <i class="fa-solid fa-hand-holding-dollar"></i><span>ديون ومشتريات اللاعبين</span>
+        </button>
+        <button onclick="openFinanceModal('customize'); closeMobileMenu();" class="sidebar-link">
+          <i class="fa-solid fa-sliders"></i><span>الأسعار وتخصيص الوصل</span>
+        </button>
+      </section>
+
+      <section>
+        <h2 class="mb-2 px-3 text-[10px] font-black uppercase tracking-widest text-slate-500">التنبيهات والنسخ</h2>
+        <button onclick="runThreeDayCountdownReminders(false); closeMobileMenu();" id="btnThreeDayAlerts" class="sidebar-link">
+          <i class="fa-solid fa-bell"></i><span>تذكيرات قرب الانتهاء</span>
+        </button>
+        <button onclick="runTelegramCheckForAllExpired(); closeMobileMenu();" id="btnAlertAll" class="sidebar-link">
+          <i class="fa-brands fa-telegram"></i><span>إشعار الاشتراكات المنتهية</span>
+        </button>
+        <button onclick="sendBackupToTelegram(); closeMobileMenu();" id="btnCloudBackup" class="sidebar-link">
+          <i class="fa-solid fa-cloud-arrow-up"></i><span>نسخة احتياطية سحابية</span>
+        </button>
+      </section>
+
+      <section>
+        <h2 class="mb-2 px-3 text-[10px] font-black uppercase tracking-widest text-slate-500">النظام</h2>
+        <button onclick="openAuditLogModal(); closeMobileMenu();" class="sidebar-link">
+          <i class="fa-solid fa-clock-rotate-left"></i><span>سجل النشاطات</span>
+        </button>
+        <button onclick="openSettingsModal(); closeMobileMenu();" class="sidebar-link relative">
+          <i class="fa-solid fa-gear"></i><span>الإعدادات والنسخ</span>
+          <span id="botStatusDot" class="absolute left-3 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full border-2 border-slate-950 bg-red-500"></span>
+        </button>
+        <button onclick="lockSystemNow(); closeMobileMenu();" id="btnLockNow" class="sidebar-link text-rose-300 hover:bg-rose-500/10 hover:text-rose-200">
+          <i class="fa-solid fa-lock"></i><span>قفل التطبيق</span>
+        </button>
+      </section>
+    </nav>
+    <div class="border-t border-slate-800 px-5 py-4">
+      <p class="text-[10px] font-bold text-slate-500">حالة البوت</p>
+      <span id="botStatusBadgeMobile" class="mt-1 inline-flex rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-slate-400">غير متصل</span>
+      <p class="mt-3 text-[10px] text-slate-600">تقديم شركة FRD</p>
+    </div>
+  </aside>
+
+  <!-- الهيدر العلوي -->
+  <header class="sticky top-0 z-30 border-b border-blue-500/20 bg-slate-950/90 backdrop-blur-md lg:mr-72">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+      <div class="flex min-w-0 items-center gap-3">
+        <div class="h-11 w-11 shrink-0 rounded-xl border border-blue-500/40 bg-slate-900 p-1">
+          <img src="logo.svg" alt="شعار Power Gym" class="h-full w-full object-contain">
+        </div>
+        <div class="min-w-0">
+          <h1 id="headerGymTitle" class="truncate text-base font-black tracking-wide text-white md:text-xl">Power Gym <span class="text-amber-500">| بور جم</span></h1>
+          <p id="headerGymSubtitle" class="mt-0.5 flex items-center gap-1.5 truncate text-[10px] font-semibold text-slate-400 md:text-xs">
+            <i class="fa-solid fa-location-dot text-amber-500"></i><span>كربلاء - الحر - قرب فلكة الثورة</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex shrink-0 items-center gap-2">
+        <span class="hidden rounded-full border border-slate-700 bg-slate-900 px-2.5 py-1 text-[10px] font-bold text-slate-400 sm:inline-flex">لوحة المشرف</span>
+        <button onclick="openAddModal()" class="flex items-center gap-2 rounded-xl bg-gradient-to-l from-blue-600 to-sky-500 px-3 py-2.5 text-xs font-black text-white shadow-lg shadow-blue-950/50 md:px-4 md:text-sm">
+          <i class="fa-solid fa-user-plus"></i><span>إضافة لاعب</span>
+        </button>
+        <button onclick="toggleMobileMenu()" id="mobileMenuToggle" aria-label="فتح القائمة الرئيسية" aria-expanded="false" class="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-500/30 bg-slate-900 text-lg text-blue-300 lg:hidden">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- المحتوى الرئيسي -->
+  <!-- ========================================== -->
+  <main class="mx-auto mt-6 max-w-7xl px-4 lg:mr-72" id="playersDirectory">
+    
+    <!-- الغلاف الرئيسي -->
+    <section class="pg-hero" aria-label="ترحيب">
+      <div class="pg-hero__img"></div>
+      <div class="pg-hero__content">
+        <span class="pg-hero__kicker"><i class="fa-solid fa-bolt"></i> لوحة المشرف</span>
+        <h2 class="pg-hero__title">أهلاً بك في <span class="text-sky-300">Power Gym</span></h2>
+        <p class="pg-hero__sub">متابعة اللاعبين والاشتراكات والمالية من مكان واحد، وبخطوة وحدة.</p>
+        <div class="pg-hero__actions">
+          <button onclick="openAddModal()" class="pg-btn"><i class="fa-solid fa-user-plus"></i>تسجيل لاعب</button>
+          <button onclick="openMonthlyReportModal()" class="pg-btn pg-btn--ghost"><i class="fa-solid fa-file-lines"></i>التقرير الشهري</button>
+          <button onclick="runThreeDayCountdownReminders(false)" class="pg-btn pg-btn--ghost"><i class="fa-solid fa-bell"></i>التذكيرات</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- بطاقات الإحصائيات الأساسية + المالية القابلة للتعديل -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-6">
+      <div onclick="setFilter('all')" class="card-bg p-4 rounded-2xl flex items-center justify-between border-r-4 border-r-blue-500 cursor-pointer hover:border-blue-400 transition">
+        <div>
+          <p class="text-slate-400 text-[11px] font-bold">إجمالي اللاعبين</p>
+          <p id="statTotal" class="text-2xl font-black text-white mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-users"></i>
+        </div>
+      </div>
+
+      <div onclick="setFilter('active')" class="card-bg p-4 rounded-2xl flex items-center justify-between border-r-4 border-r-emerald-500 cursor-pointer hover:border-emerald-400 transition">
+        <div>
+          <p class="text-slate-400 text-[11px] font-bold">اشتراك فعال</p>
+          <p id="statActive" class="text-2xl font-black text-emerald-400 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+      </div>
+
+      <div onclick="setFilter('soon')" class="card-bg p-4 rounded-2xl flex items-center justify-between border-r-4 border-r-amber-500 cursor-pointer hover:border-amber-400 transition" title="اللاعبين الذين ينتهي اشتراكهم خلال 3 أيام (يرسل لهم البوت 3 إشعارات يومية)">
+        <div>
+          <p class="text-slate-400 text-[11px] font-bold">ينتهي قريباً (3 أيام)</p>
+          <p id="statSoon" class="text-2xl font-black text-amber-400 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-bell"></i>
+        </div>
+      </div>
+
+      <div onclick="setFilter('expired')" class="card-bg p-4 rounded-2xl flex items-center justify-between border-r-4 border-r-red-500 cursor-pointer hover:border-red-400 transition">
+        <div>
+          <p class="text-slate-400 text-[11px] font-bold">اشتراك منتهي</p>
+          <p id="statExpired" class="text-2xl font-black text-red-500 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+      </div>
+
+      <div onclick="openFinanceModal('profits')" class="card-bg p-4 rounded-2xl flex items-center justify-between border-r-4 border-r-purple-500 cursor-pointer hover:border-purple-400 transition group" title="اضغط لتعديل الأرباح والإيرادات والمصاريف">
+        <div>
+          <div class="flex items-center gap-1">
+            <p class="text-slate-400 text-[11px] font-bold">صافي الأرباح</p>
+            <span class="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.2 rounded font-bold group-hover:bg-purple-500 group-hover:text-white transition">تعديل ✏️</span>
+          </div>
+          <p id="statRevenue" class="text-lg font-black text-purple-400 mt-1">0 <span class="text-[10px]">د.ع</span></p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-sack-dollar"></i>
+        </div>
+      </div>
+
+      <div onclick="openFinanceModal('debts')" class="card-bg p-4 rounded-2xl flex items-center justify-between border-r-4 border-r-rose-500 cursor-pointer hover:border-rose-400 transition group" title="اضغط لتعديل ديون اللاعبين أو تسديدها">
+        <div>
+          <div class="flex items-center gap-1">
+            <p class="text-slate-400 text-[11px] font-bold">الديون المتبقية</p>
+            <span class="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-bold group-hover:bg-rose-500 group-hover:text-white transition">تعديل ✏️</span>
+          </div>
+          <p id="statDebt" class="text-lg font-black text-rose-400 mt-1">0 <span class="text-[10px]">د.ع</span></p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- شريط البحث والفلترة والترتيب وطريقة العرض -->
+    <div class="card-bg p-4 rounded-2xl mb-6 space-y-3">
+      <div class="flex flex-col lg:flex-row justify-between items-center gap-3">
+        <!-- حقل البحث الفوري -->
+        <div class="relative w-full lg:w-96">
+          <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-slate-400"></i>
+          <input type="text" id="searchInput" oninput="renderPlayers()" placeholder="ابحث بالاسم، رقم الموبايل، أو كود اللاعب..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pr-10 pl-4 py-2.5 text-sm focus:outline-none focus:border-amber-500 text-white">
+        </div>
+
+        <!-- أزرار الفلترة -->
+        <div class="flex items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
+          <button onclick="setFilter('all')" id="flt-all" class="filter-btn bg-amber-500 text-black px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap transition">الكل</button>
+          <button onclick="setFilter('active')" id="flt-active" class="filter-btn bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">الفعالين 🟢</button>
+          <button onclick="setFilter('soon')" id="flt-soon" class="filter-btn bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">ينتهي قريباً 🟡</button>
+          <button onclick="setFilter('expired')" id="flt-expired" class="filter-btn bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">المنتهية 🔴</button>
+          <button onclick="setFilter('debt')" id="flt-debt" class="filter-btn bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">بذمتهم دين 💰</button>
+        </div>
+      </div>
+
+      <!-- شريط الأدوات الإضافي: ترتيب + تبديل عرض (بطاقات/جدول) + تصدير إكسل -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400 font-bold"><i class="fa-solid fa-arrow-down-wide-short text-amber-500 ml-1"></i>ترتيب حسب:</span>
+          <select id="sortSelect" onchange="renderPlayers()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-bold focus:border-amber-500 focus:outline-none">
+            <option value="newest">الأحدث تسجيلاً</option>
+            <option value="expiry_asc">الأقرب انتهاءً</option>
+            <option value="name_asc">الاسم (أ - ي)</option>
+            <option value="debt_desc">الأعلى ديناً</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="exportToExcelCSV()" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>تصدير Excel</span>
+          </button>
+
+          <div class="bg-slate-900 p-1 rounded-lg border border-slate-700 flex items-center">
+            <button onclick="setViewMode('cards')" id="viewCardsBtn" class="px-2.5 py-1 rounded-md bg-amber-500 text-black font-bold transition" title="عرض البطاقات">
+              <i class="fa-solid fa-grip"></i>
+            </button>
+            <button onclick="setViewMode('table')" id="viewTableBtn" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white font-bold transition" title="عرض الجدول">
+              <i class="fa-solid fa-table-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- شبكة بطاقات اللاعبين (Cards View) -->
+    <div id="playersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- يتم ملؤها عبر الجافاسكربت -->
+    </div>
+
+    <!-- جدول اللاعبين التفصيلي (Table View) -->
+    <div id="playersTableContainer" class="hidden card-bg rounded-2xl overflow-hidden border border-slate-700">
+      <div class="overflow-x-auto">
+        <table class="w-full text-right text-xs">
+          <thead class="bg-slate-900/90 text-slate-300 border-b border-slate-700 font-black">
+            <tr>
+              <th class="p-3.5">اللاعب</th>
+              <th class="p-3.5">الكود / القسم</th>
+              <th class="p-3.5">الموبايل</th>
+              <th class="p-3.5">البدء والانتهاء</th>
+              <th class="p-3.5">المالية</th>
+              <th class="p-3.5">الحالة</th>
+              <th class="p-3.5 text-center">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="playersTableBody" class="divide-y divide-slate-800"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- نافذة إضافة / تعديل لاعب (Player Modal) -->
+  <!-- ========================================== -->
+  <div id="playerModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="card-bg w-full max-w-xl rounded-3xl p-6 border border-slate-700 shadow-2xl my-auto max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-5">
+        <h3 id="modalTitle" class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-amber-500"></i>
+          <span>إضافة لاعب جديد</span>
+        </h3>
+        <button onclick="closePlayerModal()" class="text-slate-400 hover:text-white w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="playerForm" onsubmit="savePlayer(event)" class="space-y-4">
+        <input type="hidden" id="editingPlayerId" value="">
+
+        <!-- رفع الصورة -->
+        <div class="flex flex-col items-center">
+          <label for="playerPhotoInput" class="cursor-pointer group relative">
+            <img id="photoPreview" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="صورة اللاعب" class="w-24 h-24 rounded-full object-cover border-2 border-amber-500 p-0.5 bg-slate-800">
+            <div class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <i class="fa-solid fa-camera text-white text-xl"></i>
+            </div>
+          </label>
+          <input type="file" id="playerPhotoInput" accept="image/jpeg,image/png,image/webp" capture="environment" class="hidden" onchange="handleImageUpload(event)">
+          <span class="text-xs text-slate-400 mt-2">اضغط على الدائرة لالتقاط أو رفع صورة اللاعب (تُضغط تلقائياً)</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-slate-300 mb-1">اسم اللاعب الكامل *</label>
+            <input type="text" id="playerName" required maxlength="80" placeholder="مثال: علي حسين الكربلائي" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">العمر *</label>
+            <input type="number" id="playerAge" required min="10" max="80" placeholder="22" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">رقم الموبايل العراقي (واتساب + تفعيل التلي) *</label>
+            <input type="tel" id="playerPhone" required maxlength="15" oninput="handlePhoneInputLookup(this.value)" placeholder="07801234567" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none text-left text-white" dir="ltr">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">نوع الاشتراك / القسم</label>
+            <select id="planType" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none text-white">
+              <option value="حديد عام (كمال أجسام)">حديد عام (كمال أجسام)</option>
+              <option value="أجهزة وكارديو (لياقة وتخسيس)">أجهزة وكارديو (لياقة وتخسيس)</option>
+              <option value="شامل VIP (حديد + كارديو)">شامل VIP (حديد + كارديو)</option>
+              <option value="تدريب خاص (كورس VIP)">تدريب خاص (كورس VIP)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- صندوق الربط الذكي بتليكرام اللاعب وإرسال رسالة التفعيل -->
+        <div class="bg-blue-950/30 border border-blue-500/30 rounded-2xl p-3.5 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-black text-blue-300 flex items-center gap-1.5">
+              <i class="fa-brands fa-telegram text-blue-400 text-base"></i>
+              <span>ربط تليكرام اللاعب وإرسال رسالة التفعيل + إشعارات الـ 3 أيام</span>
+            </span>
+            <span id="playerTelegramLinkBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold">
+              يربط تلقائياً برقم الهاتف 📲
+            </span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
+            <div class="md:col-span-2">
+              <input type="text" id="playerChatIdInput" placeholder="معرف تليكرام اللاعب (يُملأ تلقائياً عند مراسلته للبوت أو أدخله اختيارياً)" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-left text-white focus:border-blue-400 focus:outline-none" dir="ltr">
+            </div>
+            <button type="button" onclick="pollBotUpdatesForPlayers(false)" class="bg-blue-600/25 hover:bg-blue-600/40 text-blue-300 border border-blue-500/40 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
+              <i class="fa-solid fa-rotate"></i> فحص ربط الرقم
+            </button>
+          </div>
+          <label class="flex items-center gap-2 text-xs text-slate-200 font-bold cursor-pointer pt-1">
+            <input type="checkbox" id="sendActivationOnSave" checked class="accent-amber-500 w-4 h-4 rounded">
+            <span>إرسال رسالة تفعيل الاشتراك للاعب على التليكرام فور الحفظ (مع تذكير الـ 3 أيام قبل الانتهاء)</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">تاريخ البدء *</label>
+            <input type="date" id="startDate" required onchange="calculateEndDate()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">مدة الاشتراك *</label>
+            <select id="durationMonths" onchange="calculateEndDate(); applyDefaultPriceForDuration();" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none text-white">
+              <option value="1">شهر واحد (1)</option>
+              <option value="2">شهران (2)</option>
+              <option value="3">3 أشهر</option>
+              <option value="6">6 أشهر</option>
+              <option value="12">سنة كاملة (12)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-amber-400 mb-1">تاريخ انتهاء الاشتراك (شوكت يخلص - يحسب تلقائياً أو عدله يدوياً)</label>
+          <input type="date" id="endDate" required class="w-full bg-slate-950 border border-amber-500/40 text-amber-400 font-bold rounded-xl px-3.5 py-2.5 text-sm focus:border-amber-500 focus:outline-none">
+        </div>
+
+        <!-- الحقول المالية والملاحظات -->
+        <div class="grid grid-cols-2 gap-4 pt-1">
+          <div>
+            <label class="block text-xs font-bold text-emerald-400 mb-1">المبلغ المدفوع (د.ع)</label>
+            <input type="number" id="paidAmount" min="0" step="500" value="25000" placeholder="25000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:border-emerald-500 focus:outline-none text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-rose-400 mb-1">المبلغ المتبقي / الدين (د.ع)</label>
+            <input type="number" id="debtAmount" min="0" step="500" value="0" placeholder="0" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:border-rose-500 focus:outline-none text-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">ملاحظات الكابتن (فصيلة الدم، إصابة، كورس مكملات...)</label>
+          <input type="text" id="playerNotes" maxlength="160" placeholder="اختياري..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:border-amber-500 focus:outline-none text-white">
+        </div>
+
+        <div class="bg-blue-950/25 border border-blue-500/30 rounded-2xl p-4 space-y-3">
+          <div>
+            <label class="block text-sm font-black text-blue-300 mb-1">ملف الكورس الخاص باللاعب</label>
+            <p class="text-[11px] text-slate-400">احفظ تفاصيل الكورس وصوره حتى ترجع لها إذا نسيها اللاعب. البيانات والصور محفوظة محلياً ضمن ملف اللاعب.</p>
+          </div>
+          <div>
+            <label for="courseNotes" class="block text-xs font-bold text-slate-300 mb-1">تفاصيل وملاحظات الكورس</label>
+            <textarea id="courseNotes" maxlength="2000" rows="4" placeholder="اكتب تفاصيل البرنامج، الجرعات/المواعيد التي زودت بها اللاعب، أو ملاحظات المتابعة..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-blue-500 focus:outline-none text-white resize-y"></textarea>
+          </div>
+          <div>
+            <label for="courseImagesInput" class="block text-xs font-bold text-slate-300 mb-1">صور تعليمات أو صفحات الكورس (حد أقصى 5)</label>
+            <input type="file" id="courseImagesInput" accept="image/jpeg,image/png,image/webp" multiple onchange="handleCourseImagesUpload(event)" class="block w-full text-xs text-slate-300 file:ml-3 file:rounded-lg file:border-0 file:bg-blue-600 file:px-3 file:py-2 file:font-bold file:text-white">
+            <div id="courseImagesPreview" class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3"></div>
+          </div>
+        </div>
+
+        <div class="pt-3 flex gap-3">
+          <button type="submit" id="saveBtn" class="flex-1 gold-gradient text-black font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition">
+            حفظ وإرسال رسالة التفعيل للتليكرام
+          </button>
+          <button type="button" onclick="closePlayerModal()" class="px-5 bg-slate-800 text-slate-300 font-bold rounded-xl hover:bg-slate-700">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="courseRecordModal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="card-bg w-full max-w-3xl rounded-3xl p-6 border border-blue-500/40 shadow-2xl my-auto max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-4">
+        <div>
+          <h3 id="courseRecordTitle" class="text-lg font-black text-white">ملف كورس اللاعب</h3>
+          <p class="text-xs text-slate-400 mt-1">الملاحظات والصور المحفوظة لهذا اللاعب</p>
+        </div>
+        <button onclick="closePlayerCourseModal()" class="text-slate-400 hover:text-white w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center" aria-label="إغلاق ملف الكورس">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="courseRecordPrintArea" class="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+        <h4 id="courseRecordPlayerName" class="text-base font-black text-blue-300 mb-3"></h4>
+        <div id="courseRecordNotes" class="whitespace-pre-wrap break-words text-sm text-slate-200 leading-7"></div>
+        <div id="courseRecordImages" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"></div>
+      </div>
+      <div class="flex gap-2 mt-4">
+        <button onclick="printPlayerCourse()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-sm">
+          <i class="fa-solid fa-print ml-1"></i> طباعة ملف الكورس
+        </button>
+        <button onclick="closePlayerCourseModal()" class="px-5 bg-slate-800 text-slate-300 font-bold rounded-xl">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- نافذة الإدارة المالية الذكية: الأرباح والديون والتخصيص (Finance & Customization Modal) -->
+  <!-- ========================================== -->
+  <div id="financeModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="card-bg w-full max-w-4xl rounded-3xl p-6 border border-amber-500/40 shadow-2xl my-auto max-h-[92vh] flex flex-col">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-4">
+        <div>
+          <h3 class="text-lg md:text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-sack-dollar text-amber-500"></i>
+            <span>مركز إدارة وتعديل الأرباح والديون والتخصيص الذكي</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">تحكم كامل بالأرباح، تعديل ديون ومدفوعات اللاعبين، وتخصيص أسعار الاشتراكات</p>
+        </div>
+        <button onclick="closeFinanceModal()" class="text-slate-400 hover:text-white w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- تبويبات المركز المالي -->
+      <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+        <button onclick="switchFinanceTab('profits')" id="finTabBtn-profits" class="px-4 py-2 rounded-xl text-xs font-black bg-amber-500 text-black transition whitespace-nowrap">
+          <i class="fa-solid fa-chart-line ml-1"></i> الأرباح والمصاريف والتعديل
+        </button>
+        <button onclick="switchFinanceTab('debts')" id="finTabBtn-debts" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition whitespace-nowrap">
+          <i class="fa-solid fa-hand-holding-dollar ml-1"></i> تعديل ديون ومدفوعات اللاعبين
+        </button>
+        <button onclick="switchFinanceTab('customize')" id="finTabBtn-customize" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition whitespace-nowrap">
+          <i class="fa-solid fa-sliders ml-1"></i> تخصيص الأسعار والجم
+        </button>
+      </div>
+
+      <!-- محتوى التبويبات القابل للتمرير -->
+      <div class="flex-1 overflow-y-auto space-y-4 pr-1">
+
+        <!-- 1. تبويب الأرباح والمصاريف -->
+        <div id="finTabContent-profits" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+              <span class="text-[11px] text-slate-400 font-bold block">مقبوضات الاشتراكات</span>
+              <span id="finPlayersPaidTotal" class="text-lg font-black text-emerald-400 mt-1 block">0 د.ع</span>
+            </div>
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+              <span class="text-[11px] text-slate-400 font-bold block">إيرادات إضافية / تعديل يدوي</span>
+              <span id="finExtraIncomeTotal" class="text-lg font-black text-blue-400 mt-1 block">0 د.ع</span>
+            </div>
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+              <span class="text-[11px] text-slate-400 font-bold block">المصاريف والاستقطاعات</span>
+              <span id="finExpensesTotal" class="text-lg font-black text-rose-400 mt-1 block">0 د.ع</span>
+            </div>
+            <div class="bg-purple-950/40 border border-purple-500/40 p-3.5 rounded-2xl">
+              <span class="text-[11px] text-purple-300 font-bold block">صافي الأرباح الكلي</span>
+              <span id="finNetProfitDisplay" class="text-xl font-black text-purple-300 mt-1 block">0 د.ع</span>
+            </div>
+          </div>
+
+          <!-- تعديل مباشر لرصيد الأرباح أو الديون -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
+            <h4 class="text-xs font-black text-amber-400 mb-3 flex items-center gap-1.5">
+              <i class="fa-solid fa-pen-ruler"></i> تعديل مباشر على إجمالي الأرباح أو الديون (تخصيص حر للكابتن)
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">تعديل / رصيد إضافي للأرباح (د.ع)</label>
+                <input type="number" id="finManualProfitInput" step="500" placeholder="مثال: 50000 أو -10000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">تعديل يدوي إضافي للديون العامة (د.ع)</label>
+                <input type="number" id="finManualDebtInput" step="500" placeholder="0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-rose-500 focus:outline-none">
+              </div>
+              <button onclick="saveManualFinanceAdjustments()" class="gold-gradient text-black font-black py-2.5 px-4 rounded-xl text-xs hover:opacity-95 transition">
+                <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ التعديل المباشر
+              </button>
+            </div>
+          </div>
+
+          <!-- إضافة حركة مالية (إيراد إضافي أو مصروف) -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
+            <h4 class="text-xs font-black text-emerald-400 mb-3 flex items-center gap-1.5">
+              <i class="fa-solid fa-plus-circle"></i> تسجيل حركة مالية جديدة (بيع مكملات / كورس خاص / مصروفات القاعة)
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 items-end">
+              <div class="md:col-span-2">
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">وصف الحركة المالية</label>
+                <input type="text" id="finTxTitle" placeholder="مثال: بيع بروتين واي / فاتورة كهرباء / صيانة جهاز" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">النوع</label>
+                <select id="finTxType" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                  <option value="income">➕ ربح / إيراد إضافي</option>
+                  <option value="expense">➖ مصروف / استقطاع</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">المبلغ (د.ع)</label>
+                <div class="flex gap-1.5">
+                  <input type="number" id="finTxAmount" min="0" step="500" placeholder="15000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                  <button onclick="addFinanceTransaction()" class="bg-emerald-500 hover:bg-emerald-400 text-black font-black px-3.5 py-2 rounded-xl text-xs whitespace-nowrap">
+                    إضافة
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div id="finTransactionsList" class="mt-3 space-y-1.5 max-h-44 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- 2. تبويب تعديل ديون ومدفوعات اللاعبين -->
+        <div id="finTabContent-debts" class="hidden space-y-3">
+          <div class="bg-slate-900/80 border border-rose-500/30 rounded-2xl p-4 space-y-3">
+            <div>
+              <h4 class="text-sm font-black text-rose-300 flex items-center gap-2">
+                <i class="fa-solid fa-cart-plus"></i> تسجيل مشتريات أو دين جديد على لاعب
+              </h4>
+              <p class="text-[11px] text-slate-400 mt-1">أضف وصف الشيء الذي اشتراه اللاعب؛ سيُضاف المبلغ تلقائياً إلى رصيده المستحق مع حفظ التفاصيل.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-2.5 items-end">
+              <div class="md:col-span-2">
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">اللاعب</label>
+                <select id="finDebtPlayerId" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"></select>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">شنو اشترى / سبب الدين</label>
+                <input type="text" id="finDebtDescription" maxlength="100" placeholder="مثال: بروتين واي، قفازات، اشتراك..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">المبلغ (د.ع)</label>
+                <input type="number" id="finDebtAmount" min="1" step="500" placeholder="25000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">التاريخ</label>
+                <input type="date" id="finDebtDate" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2 py-2 text-xs text-white">
+              </div>
+              <div class="md:col-span-5">
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">ملاحظات (اختياري)</label>
+                <input type="text" id="finDebtNotes" maxlength="160" placeholder="تفاصيل إضافية أو طريقة الاتفاق على السداد" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <button onclick="addPlayerDebtEntry()" class="bg-rose-500 hover:bg-rose-400 text-white font-black px-4 py-2.5 rounded-xl text-xs transition">
+                <i class="fa-solid fa-plus ml-1"></i> إضافة الدين
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+            <div>
+              <span class="text-xs text-slate-400 font-bold">إجمالي الديون المتبقية على اللاعبين:</span>
+              <span id="finTotalDebtBanner" class="text-lg font-black text-rose-400 mr-2">0 د.ع</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" id="finDebtSearchInput" oninput="renderFinancePlayersList()" placeholder="ابحث عن لاعب لتعديل مدفوعاته أو دينه..." class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white w-56">
+              <label class="flex items-center gap-1.5 text-xs font-bold text-rose-300 cursor-pointer">
+                <input type="checkbox" id="finOnlyDebtorsCheckbox" onchange="renderFinancePlayersList()" class="accent-rose-500">
+                <span>أصحاب الديون فقط</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="financePlayersDebtList" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- 3. تبويب التخصيص الذكي للأسعار واسم القاعة -->
+        <div id="finTabContent-customize" class="hidden space-y-4">
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
+            <h4 class="text-xs font-black text-amber-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-dumbbell"></i> تخصيص اسم القاعة والفرع (يظهر في شاشة التحميل، الهيدر، والملف السحابي)
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">اسم الجيم</label>
+                <input type="text" id="customGymNameInput" value="Power Gym | بور جم" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">العنوان / الفرع</label>
+                <input type="text" id="customGymBranchInput" value="كربلاء - الحر - قرب فلكة الثورة" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">اسم الكابتن / المشرف</label>
+                <input type="text" id="customSupervisorNameInput" maxlength="60" placeholder="مثال: الكابتن أحمد" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">نص ختم الوصل</label>
+                <input type="text" id="customReceiptStampInput" maxlength="100" placeholder="مثال: شكراً لثقتكم - إدارة Power Gym" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
+            <h4 class="text-xs font-black text-emerald-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-tags"></i> تخصيص أسعار الاشتراكات الافتراضية (د.ع) حسب المدة
+            </h4>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1">شهر واحد (1)</label>
+                <input type="number" id="priceMonth1" step="1000" value="25000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white font-bold">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1">شهران (2)</label>
+                <input type="number" id="priceMonth2" step="1000" value="45000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white font-bold">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1">3 أشهر</label>
+                <input type="number" id="priceMonth3" step="1000" value="65000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white font-bold">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1">6 أشهر</label>
+                <input type="number" id="priceMonth6" step="1000" value="120000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white font-bold">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1">سنة (12 شهر)</label>
+                <input type="number" id="priceMonth12" step="1000" value="220000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white font-bold">
+              </div>
+            </div>
+            <button onclick="saveGymCustomization()" class="gold-gradient text-black font-black py-2.5 px-5 rounded-xl text-xs hover:opacity-95 transition">
+              <i class="fa-solid fa-check ml-1"></i> حفظ إعدادات التخصيص والأسعار
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- نافذة التقويم الذكي وحاسبة التواريخ الأساسية (Smart Calendar & Date Calculator Modal) -->
+  <!-- ========================================== -->
+  <div id="smartCalendarModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="card-bg w-full max-w-5xl rounded-3xl p-6 border border-emerald-500/40 shadow-2xl my-auto max-h-[93vh] flex flex-col">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-4">
+        <div>
+          <h3 class="text-lg md:text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-amber-500"></i>
+            <span>التقويم الذكي وحاسبة تواريخ الاشتراكات الأساسية</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">يحسب تواريخ البدء والانتهاء (شوكت يخلص) ومواعيد إشعارات الـ 3 أيام بشكل أساسي ودقيق</p>
+        </div>
+        <button onclick="closeSmartCalendarModal()" class="text-slate-400 hover:text-white w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-3 gap-5 pr-1">
+        <!-- القسم الأيمن (عمودان): الشبكة الشهرية للتقويم الذكي -->
+        <div class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <button onclick="changeCalendarMonth(-1)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold">
+                <i class="fa-solid fa-chevron-right"></i> السابق
+              </button>
+              <button onclick="resetCalendarToToday()" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs font-black">
+                اليوم
+              </button>
+              <button onclick="changeCalendarMonth(1)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold">
+                التالي <i class="fa-solid fa-chevron-left"></i>
+              </button>
+            </div>
+            <h4 id="calendarMonthTitle" class="text-base font-black text-amber-400"></h4>
+          </div>
+
+          <!-- دليل ألوان التقويم -->
+          <div class="flex flex-wrap items-center gap-3 text-[10px] font-bold text-slate-400 mb-3 bg-slate-950/70 px-3 py-2 rounded-xl border border-slate-800">
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> بدء اشتراك</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> إشعار تذكير (قبل 3 أيام)</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span> انتهاء اشتراك (شوكت يخلص)</span>
+          </div>
+
+          <!-- رؤوس أيام الأسبوع -->
+          <div class="grid grid-cols-7 gap-1.5 text-center text-[11px] font-black text-slate-400 mb-1.5">
+            <div class="py-1">الأحد</div>
+            <div class="py-1">الإثنين</div>
+            <div class="py-1">الثلاثاء</div>
+            <div class="py-1">الأربعاء</div>
+            <div class="py-1">الخميس</div>
+            <div class="py-1 text-amber-400">الجمعة</div>
+            <div class="py-1">السبت</div>
+          </div>
+
+          <!-- خلايا أيام الشهر -->
+          <div id="smartCalendarGrid" class="grid grid-cols-7 gap-1.5 flex-1"></div>
+
+          <!-- تفاصيل اليوم المحدد عند النقر عليه -->
+          <div id="selectedCalendarDateDetails" class="mt-3 bg-slate-950/90 border border-slate-800 rounded-2xl p-3.5 text-xs"></div>
+        </div>
+
+        <!-- القسم الأيسر: حاسبة التواريخ الذكية للاشتراكات -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3.5 flex flex-col justify-between">
+          <div class="space-y-3">
+            <h4 class="text-sm font-black text-amber-400 flex items-center gap-1.5 border-b border-slate-800 pb-2.5">
+              <i class="fa-solid fa-calculator"></i> حاسبة التواريخ الذكية للاشتراكات
+            </h4>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-300 mb-1">تاريخ بدء الاشتراك</label>
+              <input type="date" id="calcStartDate" onchange="runSmartDateCalculator()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-300 mb-1">مدة الاشتراك</label>
+              <select id="calcDurationMonths" onchange="runSmartDateCalculator()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                <option value="1">شهر واحد (1 شهر)</option>
+                <option value="2">شهران (2 شهر)</option>
+                <option value="3">3 أشهر</option>
+                <option value="6">6 أشهر</option>
+                <option value="12">سنة كاملة (12 شهر)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-300 mb-1">أيام إضافية / تعويض تجميد (اختياري)</label>
+              <input type="number" id="calcExtraDays" value="0" min="0" max="120" oninput="runSmartDateCalculator()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+            </div>
+
+            <!-- نتائج الحساب الذكي -->
+            <div id="smartCalcResultsBox" class="bg-slate-950 border border-amber-500/30 rounded-2xl p-3.5 space-y-2 text-xs"></div>
+          </div>
+
+          <button onclick="applyCalculatedDatesToNewPlayer()" class="w-full gold-gradient text-black font-black py-2.5 rounded-xl text-xs shadow-lg hover:opacity-95 transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-user-plus"></i> تسجيل لاعب جديد بهذه التواريخ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- نافذة التجديد السريع (Quick Renew Modal) -->
+  <!-- ========================================== -->
+  <div id="renewModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4">
+    <div class="card-bg w-full max-w-md rounded-3xl p-6 border border-slate-700 shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-4">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-arrows-rotate text-emerald-400"></i>
+          <span>تجديد اشتراك اللاعب</span>
+        </h3>
+        <button onclick="closeRenewModal()" class="text-slate-400 hover:text-white w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="renewPlayerId">
+      <p id="renewPlayerName" class="text-amber-400 font-bold text-sm mb-4"></p>
+
+      <div class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">تاريخ بدء التجديد</label>
+          <input type="date" id="renewStartDate" onchange="calculateRenewEndDate()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-amber-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">مدة التجديد بالأشهر</label>
+          <select id="renewDurationMonths" onchange="calculateRenewEndDate()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-amber-500 focus:outline-none">
+            <option value="1">شهر واحد (1)</option>
+            <option value="2">شهران (2)</option>
+            <option value="3">3 أشهر</option>
+            <option value="6">6 أشهر</option>
+            <option value="12">سنة كاملة (12)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-emerald-400 mb-1">تاريخ الانتهاء الجديد</label>
+          <input type="date" id="renewEndDate" class="w-full bg-slate-950 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-emerald-400 mb-1">المبلغ المدفوع (د.ع)</label>
+            <input type="number" id="renewPaidAmount" min="0" step="500" value="25000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-rose-400 mb-1">الدين المتبقي (د.ع)</label>
+            <input type="number" id="renewDebtAmount" min="0" step="500" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+          </div>
+        </div>
+
+        <div class="pt-3 flex gap-3">
+          <button onclick="confirmRenewSubscription()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 rounded-xl transition">
+            تأكيد التجديد وإشعار التليكرام
+          </button>
+          <button onclick="closeRenewModal()" class="px-5 bg-slate-800 text-slate-300 font-bold rounded-xl hover:bg-slate-700">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- نافذة هوية اللاعب القابلة للطباعة (Membership ID Card) -->
+  <!-- ========================================== -->
+  <div id="idCardModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4">
+    <div class="card-bg w-full max-w-md rounded-3xl p-6 border border-slate-700 shadow-2xl">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-4">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-amber-500"></i>
+          <span>بطاقة عضوية اللاعب الرقمية</span>
+        </h3>
+        <button onclick="closeIdCardModal()" class="text-slate-400 hover:text-white w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- منطقة الطباعة -->
+      <div id="printableCardArea" class="bg-slate-950 border-2 border-amber-500 rounded-2xl p-5 text-center relative overflow-hidden">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+          <div class="text-right">
+            <h4 id="cardGymName" class="font-black text-amber-500 text-base">POWER GYM | بور جم</h4>
+            <p id="cardGymBranch" class="text-[10px] text-slate-400">كربلاء - الحر - قرب فلكة الثورة</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-slate-900 border border-blue-500/40 flex items-center justify-center p-1">
+            <img src="logo.svg" alt="شعار Power Gym" class="w-full h-full object-contain">
+          </div>
+        </div>
+
+        <img id="cardAvatar" src="" alt="صورة اللاعب" class="w-20 h-20 rounded-full object-cover border-2 border-amber-500 mx-auto mb-2 bg-slate-800">
+        <h3 id="cardName" class="text-lg font-black text-white"></h3>
+        <p id="cardPlan" class="text-xs text-amber-400 font-bold mb-3"></p>
+
+        <div class="grid grid-cols-2 gap-2 bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs mb-4">
+          <div>
+            <span class="text-[10px] text-slate-400 block">تاريخ البدء</span>
+            <span id="cardStart" class="font-bold text-white"></span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block">تاريخ الانتهاء</span>
+            <span id="cardEnd" class="font-black text-emerald-400"></span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between bg-slate-900/70 rounded-xl p-2.5 border border-slate-800">
+          <div class="text-right">
+            <span class="text-[10px] text-slate-400 block">رقم العضوية</span>
+            <span id="cardCode" class="text-xs font-black text-amber-400" dir="ltr"></span>
+            <span id="cardPhone" class="text-[11px] text-slate-300 block mt-0.5" dir="ltr"></span>
+          </div>
+          <img id="cardQr" src="" alt="QR" class="w-14 h-14 rounded-lg bg-white p-1">
+        </div>
+        <div class="mt-3 border-t border-dashed border-slate-700 pt-2">
+          <p class="text-[10px] text-slate-400">إشراف: <span id="cardSupervisorName" class="font-bold text-slate-200"></span></p>
+          <p id="cardReceiptStamp" class="text-[11px] font-black text-amber-400 mt-1"></p>
+        </div>
+      </div>
+
+      <div class="mt-4 flex gap-3">
+        <button onclick="printMembershipCard()" class="flex-1 gold-gradient text-white font-black py-2.5 rounded-xl flex items-center justify-center gap-2">
+          <i class="fa-solid fa-print"></i> طباعة البطاقة / الوصل
+        </button>
+        <button onclick="closeIdCardModal()" class="px-5 bg-slate-800 text-slate-300 font-bold rounded-xl">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- نافذة سجل الحركات والأمان (Audit Log Modal) -->
+  <!-- ========================================== -->
+  <div id="auditLogModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4">
+    <div class="card-bg w-full max-w-lg rounded-3xl p-6 border border-slate-700 shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-amber-500"></i>
+          <span>سجل الحركات والأمان (Audit Log)</span>
+        </h3>
+        <button onclick="closeAuditLogModal()" class="text-slate-400 hover:text-white w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="auditLogList" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- نافذة الإعدادات والحماية والنسخ الاحتياطي (Settings Modal) -->
+  <!-- ========================================== -->
+  <div id="settingsModal" class="fixed inset-0 modal-backdrop z-40 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="card-bg w-full max-w-md rounded-3xl p-6 border border-slate-700 shadow-2xl space-y-4 my-auto max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-800">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-gear text-amber-500"></i>
+          <span>إعدادات التليكرام والحماية</span>
+        </h3>
+        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1">توكن البوت (Telegram Bot Token)</label>
+        <div class="relative">
+          <input type="password" id="botTokenInput" autocomplete="off" placeholder="أدخل توكن البوت الجديد من BotFather" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-left text-white" dir="ltr">
+          <button type="button" onclick="toggleTokenVisibility()" class="absolute left-3 top-2.5 text-slate-400 hover:text-amber-400">
+            <i id="tokenEyeIcon" class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-between items-center mb-1">
+          <label class="block text-xs font-bold text-slate-300">معرف حساب الكابتن (Chat ID)</label>
+          <button type="button" onclick="autoDetectChatId(false)" class="text-[11px] text-amber-400 hover:underline font-bold flex items-center gap-1">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> تحديث الـ ID
+          </button>
+        </div>
+        <input type="text" id="chatIdInput" autocomplete="off" placeholder="يُكتشف بعد بدء البوت أو أدخله هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-left text-white" dir="ltr">
+      </div>
+
+      <div class="flex gap-2 pt-1">
+        <button onclick="saveSettings()" class="flex-1 gold-gradient text-black font-black py-2.5 rounded-xl">حفظ الإعدادات</button>
+        <button onclick="testTelegramConnection()" id="btnTestConn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm">فحص الاتصال</button>
+      </div>
+
+      <hr class="border-slate-800 my-3">
+
+      <!-- إعداد رمز الحماية PIN المشفر بـ SHA-256 -->
+      <div>
+        <h4 class="text-sm font-bold text-amber-400 mb-2 flex items-center gap-1.5">
+          <i class="fa-solid fa-user-shield"></i> حماية النظام برمز سري (PIN)
+        </h4>
+        <div class="flex gap-2">
+          <input type="password" id="newPinInput" maxlength="12" placeholder="أدخل رمز PIN جديد (أو اتركه فارغاً لإلغاء القفل)" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white" dir="ltr">
+          <button onclick="updateSecurityPin()" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/30 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
+            تحديث الرمز
+          </button>
+        </div>
+      </div>
+
+      <hr class="border-slate-800 my-3">
+
+      <!-- النسخ الاحتياطي والاسترجاع -->
+      <div>
+        <h4 class="text-sm font-bold text-slate-200 mb-2">النسخ الاحتياطي لقاعدة البيانات</h4>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="exportDatabase()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download text-amber-500"></i> تحميل نسخة احتياطية
+          </button>
+          <label class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-upload text-emerald-400"></i> استرجاع نسخة
+            <input type="file" accept=".json" class="hidden" onchange="importDatabase(event)">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- منطق التطبيق والأمان المتقدم (JavaScript) -->
+  <!-- ========================================== -->
+  <script src="app.js"></script>
+  <footer class="mx-auto max-w-7xl px-4 pt-8 pb-6 text-center lg:mr-72">
+    <div class="border-t border-blue-500/20 pt-5">
+      <p class="text-sm text-slate-400">تقديم <span class="font-black tracking-widest text-blue-300">شركة FRD</span></p>
+      <p class="text-[10px] text-slate-600 mt-1">Power Gym Management System</p>
+    </div>
+  </footer>
+  <!-- التقارير الشهرية (يحمّل بعد app.js) -->
+  <script src="reports.js"></script>
+  <script src="receipts.js"></script>
+  <script src="extras.js"></script>
+</body>
+</html>

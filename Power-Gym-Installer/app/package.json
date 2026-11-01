@@ -1,0 +1,55 @@
+{
+  "name": "power-gym-desktop",
+  "productName": "Power Gym",
+  "version": "2.1.0",
+  "description": "منظومة إدارة اشتراكات قاعة Power Gym - بور جم (كربلاء - الحر)",
+  "main": "main.js",
+  "author": "FRD",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.powergym.desktop",
+    "productName": "Power Gym",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "storage-shim.js",
+      "index.html",
+      "app.js",
+      "reports.js",
+      "receipts.js",
+      "extras.js",
+      "sw.js",
+      "style.css",
+      "theme.css",
+      "mobile.css",
+      "logo.svg",
+      "build/icon.png",
+      "manifest.json",
+      "sample_backup.json",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
